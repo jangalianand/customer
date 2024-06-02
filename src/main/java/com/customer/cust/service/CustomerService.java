@@ -1,5 +1,6 @@
 package com.customer.cust.service;
 
+import com.customer.cust.exception.CustomerNotFoundException;
 import com.customer.cust.repo.CustomerRepository;
 import com.customer.cust.entity.Customer;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ public class CustomerService {
 
     public Customer getCustomerById(Integer id) {
         log.info("getCustomerById(-) started");
-        return customerRepository.findById(id).orElse(null);
+        return customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException("Customer not found with id: " + id));
     }
 
     public Customer saveCustomer(Customer customer) {
@@ -32,7 +33,7 @@ public class CustomerService {
 
     public void deleteCustomer(Integer id) {
         log.info("deleteCustomer(-) started");
-        customerRepository.deleteById(id);
+        customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException("Customer not found with id: " + id));
     }
 }
 
